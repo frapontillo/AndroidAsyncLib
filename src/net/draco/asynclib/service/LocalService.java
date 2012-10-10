@@ -18,28 +18,42 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+/**
+ * LocalService class with a custom binder interaction.
+ * 
+ * @author CommonsWare
+ * @author Francesco Pontillo
+ */
 public class LocalService extends Service {
-	private ServiceBinder binder;
+	private ServiceBinder mBinder;
 	
 	public LocalService() {
 		super();
-		binder = new ServiceBinder();
+		mBinder = getBinder();
+	}
+	
+	/**
+	 * To be overridden by returning the real binder for this service.
+	 * @return ServiceBinder extension with the actual methods to be exposed
+	 */
+	public ServiceBinder getBinder() {
+		return new ServiceBinder();
 	}
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		binder.onCreate();
+		mBinder.onCreate();
 	}
 	
 	@Override
 	public IBinder onBind(Intent intent) {
-		return(binder);
+		return(mBinder);
 	}
 	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		binder.onDestroy();		
+		mBinder.onDestroy();		
 	}
 }

@@ -9,22 +9,29 @@ import android.content.Intent;
  * @author Francesco Pontillo
  *
  */
-public class ServiceHelper {
+public class ServiceHelper<T extends ServiceBinder> {
 	/**
 	 * Connection to the service for executing the methods exposed by its binder
 	 */
-	private static MethodServiceConnection mConnection = null;
+	private MethodServiceConnection<T> mConnection = null;
 	
 	/**
-	 * Creates the LocalService which exposes the calleable methods, then executes the binding.
+	 * Creates the LocalService which exposes the callable methods, then executes the binding.
 	 * If the service had already been started, it only binds to it.
 	 * 
 	 * @param mContext Context to bind from.
+	 * @param serviceClass Class extended from LocalService
 	 * @return MethodServiceConnection Connection, useful for executing the methods exposed by the LocalService
 	 */
-	public static MethodServiceConnection connectToService(Context mContext) {
-		mConnection = new MethodServiceConnection();
-		mContext.bindService(new Intent(mContext, LocalService.class), mConnection, Context.BIND_AUTO_CREATE);
+	public MethodServiceConnection<T> connectToService(
+			Context mContext,
+			Class<? extends LocalService> localServiceClass,
+			IServiceConnectionListener listener) {
+		mConnection = new MethodServiceConnection<T>(listener);
+		mContext.bindService(
+				new Intent(mContext, localServiceClass),
+				mConnection,
+				Context.BIND_AUTO_CREATE);
 		return mConnection;
 	}
 }

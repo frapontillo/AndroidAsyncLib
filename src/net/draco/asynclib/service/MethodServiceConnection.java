@@ -1,8 +1,5 @@
 package net.draco.asynclib.service;
 
-// TODO: Removed, for now
-// import com.itasa.droitasa.ServiceFragmentActivity;
-
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -14,27 +11,24 @@ import android.util.Log;
  * @author Francesco Pontillo
  *
  */
-public class MethodServiceConnection implements ServiceConnection {
-	public ServiceBinder serviceBinder = null;
-	// TODO: Removed, for now
-	// public ServiceFragmentActivity serviceFragmentActivity = null;
+public class MethodServiceConnection<T extends ServiceBinder> implements ServiceConnection {
+	public T serviceBinder = null;
 	private boolean isConnected = false;
-
-	// TODO: Removed, for now
-	/*
-	public MethodServiceConnection(ServiceFragmentActivity serviceFragmentActivity) {
-		this.serviceFragmentActivity = serviceFragmentActivity;
+	private IServiceConnectionListener mListener = null;
+	
+	public MethodServiceConnection(IServiceConnectionListener listener) {
+		this.mListener = listener;
 	}
-	*/
 	
 	@Override
 	public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-		serviceBinder = (ServiceBinder)rawBinder;
+		serviceBinder = (T)rawBinder;
 		isConnected = true;
 		Log.i("MethodServiceConnection", "Service connected!");
+		// Calls the connection callback
+		if (mListener != null) mListener.onServiceConnected();
+		// Random code for overridden method service connections
 		performOnConnection();
-		// TODO: Removed, for now
-		// serviceFragmentActivity.onServiceConnected();
 	}
 
 	@Override
