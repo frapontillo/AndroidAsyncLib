@@ -1,4 +1,4 @@
 AsyncLib
 ========
 
-Android library made of convenience methods for delegating asynchronous methods to a Service.
+**WARNING:** This library is **deprecated**, no longer supported, and probably has several unresolved issues. You should consider using [**foxkykeep's DataDroid**](https://github.com/foxykeep/DataDroid). instead
